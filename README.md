@@ -7,10 +7,10 @@ based on your current working directory.
 
 1. Install via the [PowerShell Gallery](https://www.powershellgallery.com/packages/pwdtasks): `Install-Module pwdtasks`
 
-2. Import the module your `$profile`: `Import-Module pwdtasks`
+2. Import the module in your `$profile`: `Import-Module pwdtasks`
 
-3. In your project's root directory, create a `.powershell/tasks.psm1` module
-and put all of your helper functions, *tasks*, in there.
+3. In your project's root directory, create a `.powershell/tasks.psm1` file
+and put all of your helper functions ("tasks") in there.
 
 4. Now whenever your `$pwd` is inside that project's directory, `pwdtasks` will
 automatically `Import-Module .powershell/tasks.psm1`. When you leave your
