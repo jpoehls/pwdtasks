@@ -27,7 +27,7 @@ CompanyName = 'Joshua Poehls'
 Copyright = '(c) 2016 Joshua Poehls. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Module that automatically loads and unloads PowerShell "tasks" based on your current working directory.'
+Description = 'PowerShell tasks that are auto-loaded/unloaded based on your current working directory.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
