@@ -1,3 +1,7 @@
+# Import-Module https://github.com/jpoehls/pwdtasks to have
+# this tasks.psm1 module automatically loaded whenever you
+# `cd` into your project's directory tree.
+
 Set-StrictMode -Version Latest
 
 # Grab the path to your project's root directory.
