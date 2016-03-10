@@ -9,10 +9,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = 'pwtasks.psm1'
+RootModule = 'pwdtasks.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.2'
+ModuleVersion = '1.0.3'
 
 # ID used to uniquely identify this module
 GUID = '9c569dfd-93b3-4da7-b9c1-53e16371ffb4'

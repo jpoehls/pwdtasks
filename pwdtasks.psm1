@@ -1,5 +1,11 @@
 ﻿Set-StrictMode -Version Latest
 
+# Stores the currently imported tasks module info.
+$script:currentTasksModule = $null
+
+# Stores the path to the currently loaded tasks module file.
+$script:currentTasksPath = $null
+
 function Get-TasksModulePath {
     <#
     .SYNOPSIS
@@ -7,18 +13,15 @@ function Get-TasksModulePath {
     Walks up from the current directory and returns the path of
     the first '.powershell/tasks.psm1' file.
     #>
-    param (
-        [string]$Path = (Get-Location).Path
-    )
     
     $TASKS_FILE = ".powershell/tasks.psm1"
 
     $found = $false
-    $p = (Resolve-Path $Path).Path
+    $p = $pwd.Path
 
     :FOUND while (!$found)
     {
-        if (Test-Path (Join-Path $p $TASKS_FILE) -PathType Item) {
+        if (Test-Path (Join-Path $p $TASKS_FILE) -PathType Leaf) {
             $found = $true
             break FOUND
         } 
@@ -28,7 +31,7 @@ function Get-TasksModulePath {
         while ($p -ne $null) {
             $pathToTest = Split-Path $p -Parent
             if ($pathToTest) {
-                if (Test-Path (Join-Path $pathToTest $TASKS_FILE) -PathType Item) {
+                if (Test-Path (Join-Path $pathToTest $TASKS_FILE) -PathType Leaf) {
                     $p = $pathToTest
                     $found = $true
                     break FOUND
@@ -69,14 +72,10 @@ function Remove-CurrentModule {
     $script:currentTasksPath = $null
 }
 
-# When the $PWD changes we will load the relevant module from the .powershell folder.
-$script:breakpoint = Set-PSBreakpoint -Variable pwd -Mode Write -Action {
-
-    if ($pwd.Provider.Name -ne "FileSystem") {
-        return
-    }
-
+function findAndImportTasksModule {
+    Write-Debug "Looking for tasks module."
     $tasksPath = Get-TasksModulePath
+    
     if ($tasksPath -eq $script:currentTasksPath) {
         if ($tasksPath) {
             Write-Debug "Tasks module unchanged: $tasksPath"
@@ -98,6 +97,19 @@ $script:breakpoint = Set-PSBreakpoint -Variable pwd -Mode Write -Action {
             Write-Debug "Tasks module not found."
         }
     }
+}
+
+# Go ahead and try to locate the tasks module right away after we are imported.
+findAndImportTasksModule
+
+# When the $PWD changes we will load the relevant module from the .powershell folder.
+$script:breakpoint = Set-PSBreakpoint -Variable pwd -Mode Write -Action {
+
+    if ($pwd.Provider.Name -ne "FileSystem") {
+        return
+    }
+
+    findAndImportTasksModule
 
 }
 
